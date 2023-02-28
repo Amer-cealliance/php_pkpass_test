@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PKPass\PKPass;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -71,7 +73,11 @@ class HomeController extends Controller
         $pass->addFile('images/logo.png');
 
         // Create and output the pass
-        $pass->create(true);
-        return "hello";
+
+        $uuid = Str::uuid();
+        $fileName =  $uuid . '.pkpass';
+        $pkpassFile = $pass->create();
+        Storage::put('pkpass/' .$fileName, $pkpassFile);
+        return storage_path('app/pkpass/'.$fileName);
     }
 }
